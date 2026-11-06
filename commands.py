@@ -217,7 +217,7 @@ async def c_help(m: Message, args: str):
 async def c_start(m: Message, args: str):
     if m.chat.type == "private":
         return  # обрабатывает menu.py
-    await m.reply("👋 Я чат-менеджер Heliys: экономика, игры и модерация.\nНапиши <code>команды</code>.")
+    await m.reply("👋 Я чат-менеджер Cursed: экономика, игры и модерация.\nНапиши <code>команды</code>.")
 
 
 # ---------- диспетчер ----------
