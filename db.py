@@ -33,6 +33,12 @@ CREATE TABLE IF NOT EXISTS props(user_id INTEGER, item TEXT, ts REAL, PRIMARY KE
 CREATE TABLE IF NOT EXISTS promos(code TEXT PRIMARY KEY, amount INTEGER, bonds INTEGER DEFAULT 0, uses INTEGER);
 CREATE TABLE IF NOT EXISTS promo_used(code TEXT, user_id INTEGER, PRIMARY KEY(code, user_id));
 CREATE TABLE IF NOT EXISTS settings(key TEXT PRIMARY KEY, val TEXT);
+CREATE TABLE IF NOT EXISTS cooldowns(
+  user_id INTEGER, chat_id INTEGER, kind TEXT, ts REAL, PRIMARY KEY(user_id, chat_id, kind)
+);
+CREATE TABLE IF NOT EXISTS chat_subs(
+  chat_id INTEGER, target_id INTEGER, title TEXT, link TEXT, PRIMARY KEY(chat_id, target_id)
+);
 """
 
 

@@ -95,7 +95,7 @@ async def invest(uid, cid, amount: int):
     if amount > room:
         return False, f"В бюджет влезает ещё максимум {amount_fmt(room)}"
     if not await pay_from(uid, cid, amount):
-        return False, "Недостаточно хел коинов" + ("" if cid else " на счёте")
+        return False, "Недостаточно cur коинов" + ("" if cid else " на счёте")
     await contribute(uid, amount)
     return True, f"🏛 Ты вложил {amount_fmt(amount)} в бюджет города. Спасибо, меценат!"
 
@@ -107,10 +107,10 @@ async def buy_bonds(uid, cid, n: int):
         return False, "Бюджет города заполнен — облигации больше не продаются" if room <= 0 else \
             f"В бюджет влезает не больше {room // BOND_PRICE} облигаций"
     if not await pay_from(uid, cid, cost):
-        return False, f"Не хватает хел коинов: нужно {amount_fmt(cost)}" + ("" if cid else " (на счёте)")
+        return False, f"Не хватает cur коинов: нужно {amount_fmt(cost)}" + ("" if cid else " (на счёте)")
     await contribute(uid, cost, bonds=n)
     await db.run("UPDATE users SET bonds=bonds+? WHERE id=?", (n, uid))
-    return True, f"📜 Куплено облигаций: {n} за {amount_fmt(cost)}. Хелы ушли в бюджет города."
+    return True, f"📜 Куплено облигаций: {n} за {amount_fmt(cost)}. Коины ушли в бюджет города."
 
 
 def amount_fmt(n) -> str:
@@ -177,7 +177,7 @@ async def accrue(uid):
 async def deposit_in(uid, cid, amount):
     await accrue(uid)
     if not await w_take(uid, cid, amount):
-        return False, "Недостаточно хел коинов в кошельке"
+        return False, "Недостаточно cur коинов в кошельке"
     fee = int(amount * DEPOSIT_FEE)
     await db.run("UPDATE users SET deposit=deposit+?, deposit_ts=CASE WHEN deposit=0 THEN ? ELSE deposit_ts END "
                  "WHERE id=?", (amount - fee, now(), uid))
@@ -245,7 +245,7 @@ async def buy_item(uid, cid, code):
     if await db.one("SELECT 1 FROM props WHERE user_id=? AND item=?", (uid, code)):
         return False, "У тебя это уже есть"
     if not await w_take(uid, cid, price):
-        return False, f"Не хватает хел коинов: нужно {amount_fmt(price)}"
+        return False, f"Не хватает cur коинов: нужно {amount_fmt(price)}"
     await db.run("INSERT INTO props(user_id,item,ts) VALUES(?,?,?)", (uid, code, now()))
     key, pct = SHOP_COMMISSION[cat]
     await pay_elite(key, price, pct)

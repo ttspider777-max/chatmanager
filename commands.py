@@ -10,6 +10,8 @@ import db
 import economy as eco
 import games  # noqa: F401  (регистрирует игровые команды)
 import moderation
+import newyear
+import opsub
 import texts
 from access import SUB_TEXT, missing_subs, sub_markup
 from config import *
@@ -281,8 +283,18 @@ async def on_text(m: Message):
     if m.chat.type != "private":
         await db.upsert_chat(m.chat)
         await db.run("UPDATE users SET msgs=msgs+1 WHERE id=?", (m.from_user.id,))
+        if await opsub.check_message(m):
+            return
         if await moderation.run_filters(m):
             return
     elif (m.text or "").startswith("/start") or (m.text or "").startswith("/admin"):
         return
-    await dispatch(m)
+    handled = await dispatch(m)
+    if not handled and m.chat.type != "private":
+        await newyear.maybe_chatter(m)
+
+
+@router.message(F.from_user, F.chat.type.in_({"group", "supergroup"}))
+async def on_other(m: Message):
+    """Фото, стикеры, голосовые и т.п. в группе — тоже проверяем на ОП."""
+    await opsub.check_message(m)

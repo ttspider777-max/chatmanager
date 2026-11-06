@@ -32,7 +32,7 @@ async def place_bet(m: Message, arg: str):
         await m.reply(f"Минимальная ставка — {MIN_BET}")
         return None
     if not await eco.w_take(uid, cid, bet):
-        await m.reply(f"Недостаточно хел коинов. В кошельке: {money(bal)}")
+        await m.reply(f"Недостаточно cur коинов. В кошельке: {money(bal)}")
         return None
     await eco.pay_elite("casino", bet, 0.01)
     return cid, bet

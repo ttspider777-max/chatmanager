@@ -14,6 +14,7 @@ import db
 import economy as eco
 import menu
 import moderation
+import opsub
 from config import ELITE, STAGES
 from middlewares import Gate
 from utils import fmt
@@ -55,7 +56,7 @@ async def main():
     dp = Dispatcher(storage=MemoryStorage())
     dp.message.outer_middleware(Gate())
     dp.callback_query.outer_middleware(Gate())
-    dp.include_routers(admin.router, menu.router, moderation.router, commands.router)
+    dp.include_routers(admin.router, menu.router, opsub.router, moderation.router, commands.router)
 
     async def on_stage(old, new):
         await announce_stage(bot, old, new)

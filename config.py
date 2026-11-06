@@ -22,7 +22,7 @@ DEV_ID = int(os.environ.get("ADMIN_ID", "0"))
 DB_PATH = str(BASE / "data" / "bot.db")
 BOT_USERNAME = ""  # заполняется при старте
 
-CUR = "хел коинов"
+CUR = "cur коинов"
 
 # --- экономика ---
 START_BALANCE = 5_000        # стартовый кошелёк в каждом новом чате

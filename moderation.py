@@ -18,7 +18,7 @@ from utils import esc, fill_name, fmt_dur, mention, parse_duration
 
 router = Router()
 DEFAULT_WELCOME = ("👋 Добро пожаловать, {name}!\n\n"
-                   "Я чат-менеджер Heliys: играй, копи хел коины и вкладывай в бюджет города.\n"
+                   "Я чат-менеджер Heliys: играй, копи cur коины и вкладывай в бюджет города.\n"
                    "Все команды — напиши «команды».")
 URL_RE = re.compile(r"(https?://|www\.|t\.me/|@\w+\.\w{2,}|\b\w+\.(com|ru|io|me|org|net|xyz)\b)", re.I)
 flood: dict[tuple, deque] = defaultdict(lambda: deque(maxlen=6))
@@ -357,7 +357,9 @@ async def settings(m: Message, args: str):
         return
     c = await db.get_chat(m.chat.id)
     onoff = lambda v: "✅ вкл" if v else "⛔ выкл"
+    op = await db.scalar("SELECT COUNT(*) FROM chat_subs WHERE chat_id=?", (m.chat.id,))
     await m.reply(f"⚙️ <b>Настройки чата</b>\n\nАнтиссылки: {onoff(c['antilink'])}\nАнтифлуд: {onoff(c['antiflood'])}\n"
+                  f"ОП: {f'✅ каналов: {op}' if op else '⛔ выкл'}\n"
                   f"Приветствие: {'выкл' if c['welcome'] == '' else 'своё' if c['welcome'] else 'стандартное'}\nПравила: {'есть' if c['rules'] else 'нет'}\n"
                   f"Добавил бота: <code>{c['added_by'] or '—'}</code>")
 
