@@ -158,7 +158,7 @@ async def _make_link(bot: Bot, ch) -> str | None:
     if ch.invite_link:
         return ch.invite_link
     try:
-        return (await bot.create_chat_invite_link(ch.id, name="ОП Cursed")).invite_link
+        return (await bot.create_chat_invite_link(ch.id, name="ОП Heliys")).invite_link
     except Exception:
         return None
 

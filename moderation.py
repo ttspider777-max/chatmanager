@@ -18,7 +18,7 @@ from utils import esc, fill_name, fmt_dur, mention, parse_duration
 
 router = Router()
 DEFAULT_WELCOME = ("👋 Добро пожаловать, {name}!\n\n"
-                   "Я чат-менеджер Cursed: играй, копи cur коины и вкладывай в бюджет города.\n"
+                   "Я чат-менеджер Heliys: играй, копи cur коины и вкладывай в бюджет города.\n"
                    "Все команды — напиши «команды».")
 URL_RE = re.compile(r"(https?://|www\.|t\.me/|@\w+\.\w{2,}|\b\w+\.(com|ru|io|me|org|net|xyz)\b)", re.I)
 flood: dict[tuple, deque] = defaultdict(lambda: deque(maxlen=6))
@@ -436,7 +436,7 @@ async def bot_status(ev: ChatMemberUpdated, bot: Bot):
             try:
                 await bot.send_message(
                     ev.chat.id,
-                    f"👋 Привет! Я чат-менеджер Cursed.\nМеня добавил {mention(ev.from_user.id, ev.from_user.full_name)} — "
+                    f"👋 Привет! Я чат-менеджер Heliys.\nМеня добавил {mention(ev.from_user.id, ev.from_user.full_name)} — "
                     "теперь он может банить, мутить и настраивать чат через меня.\n\n"
                     "Выдай мне права админа (удаление сообщений, блокировка пользователей) и напиши <code>команды</code>.")
             except Exception:
